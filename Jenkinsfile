@@ -52,9 +52,9 @@ pipeline {
                                   lineCoverageTargets: '70',
                                   fileCoverageTargets: '70',
                                   sourceEncoding: 'ASCII',
-                                  conditionalCoverageTargets: '70'
+                                  conditionalCoverageTargets: '70',
                                   thresholdTarget: '70'
-                                  ,)
+                                  )
                     }
                 }
             }
