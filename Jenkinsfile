@@ -44,7 +44,8 @@ pipeline {
                     steps {
                         sh "yarn install"
                         sh 'yarn run test --coverage'
-                        cobertura(autoUpdateHealth: true,
+                        cobertura(
+                                  autoUpdateHealth: false,
                                   autoUpdateStability: false,
                                   coberturaReportFile: '**/coverage/cobertura-coverage.xml',
                                   failNoReports: true,
