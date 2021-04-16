@@ -8,17 +8,17 @@ pipeline {
     environment {
         CI = 'true'
         HOME = '.'
-        npm_config_cache = 'npm-cache'
+        //npm_config_cache = 'npm-cache'
         DOCKER_HUB_PASSWORD = credentials('docker_hub_password')
     }
 
 
     stages {
-        stage('Clone git') {
+        /* stage('Clone git') {
             steps {
                 git 'https://github.com/stainley/react-portfolio.git'
             }
-        }
+        } */
 
         stage('Install Packages') {
             steps {
