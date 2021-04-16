@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+[![Quality Gate Status](http://192.168.1.50:9000/api/project_badges/measure?project=com.salapp.react.portfolio.web&metric=alert_status)](http://saiyamans.synology.me:9000/dashboard?id=com.salapp.react.portfolio.web)
+
 ## Available Scripts
 
 In the project directory, you can run:
