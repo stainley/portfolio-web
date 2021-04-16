@@ -16,7 +16,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-
   },
   "eslintConfig": {
     "extends": [
@@ -51,12 +50,14 @@
         "statements": 80
       }
     },
-    "coveragePathIgnorePatterns" : [
+    "coveragePathIgnorePatterns": [
       "!<rootDir>/node_modules/"
     ],
     "coverageReporters": [
       "text",
-      "html"
+      "html",
+      "lcov",
+      "cobertura"
     ]
   }
 }
