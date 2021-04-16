@@ -44,7 +44,7 @@ pipeline {
                     steps {
                         sh "yarn install"
                         sh 'yarn run test --coverage'
-                        cobertura(autoUpdateHealth: true, autoUpdateStability: true, coberturaReportFile: '**/coverage/cobertura-coverage.xml', failNoReports: true, classCoverageTargets: '70', lineCoverageTargets: '80', fileCoverageTargets: '90', sourceEncoding: 'ASCII', conditionalCoverageTargets: '70')
+                        cobertura(autoUpdateHealth: true, autoUpdateStability: true, coberturaReportFile: '**/coverage/cobertura-coverage.xml', failNoReports: true, classCoverageTargets: '70', lineCoverageTargets: '70', fileCoverageTargets: '70', sourceEncoding: 'ASCII', conditionalCoverageTargets: '70')
                     }
                 }
             }
