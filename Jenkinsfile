@@ -99,7 +99,7 @@ pipeline {
     }
     post {
         always {
-            sendNotifications currentBuild.result
+            emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
         }
     }
 }
