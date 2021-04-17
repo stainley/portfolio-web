@@ -97,41 +97,54 @@ pipeline {
             }
         }
 
-        stage('Build and Deploy - QA') {
-            when {
-                branch 'development'
-            }
-            steps {
-                sh 'chmod 777 ./jenkins/scripts/deploy-for-qa.sh'
-                sh './jenkins/scripts/deploy-for-qa.sh'
-            }
-        }
-
-        stage('Build and Deploy - Production') {
-            when {
-                branch 'master'
-            }
-
-            stages {
-                stage('Build Docker Image and Push to Docker Hub') {
-                    steps {
-                        sh 'chmod 777 ./jenkins/scripts/deploy-for-production.sh'
-                        sh './jenkins/scripts/deploy-for-production.sh'
-
-                        withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
-                            sh 'docker login -u $USR --password $DOCKER_HUB_PASSWORD'
-                            sh 'docker push stainley/portfolio-react:0.1.1'
+        stage ('Deploy') {
+            parallel {
+                stage('QA') {
+                    stages {
+                        stage('Build and Deploy - QA') {
+                            when {
+                                branch 'development'
+                            }
+                            steps {
+                                sh 'chmod 777 ./jenkins/scripts/deploy-for-qa.sh'
+                                sh './jenkins/scripts/deploy-for-qa.sh'
+                            }
                         }
                     }
                 }
+                stage('Production') {
+                    stages {
+                        stage('Build and Deploy - Production') {
+                            when {
+                                branch 'master'
+                            }
 
-                stage('Deploy to Kubernetes'){
-                    steps {
-                        sh 'echo Deploying to Kubernetes'
+                                stages {
+                                    stage('Build Docker Image and Push to Docker Hub') {
+                                        steps {
+                                            sh 'chmod 777 ./jenkins/scripts/deploy-for-production.sh'
+                                            sh './jenkins/scripts/deploy-for-production.sh'
+
+                                            withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
+                                                sh 'docker login -u $USR --password $DOCKER_HUB_PASSWORD'
+                                                sh 'docker push stainley/portfolio-react:0.1.1'
+                                            }
+                                        }
+                                    }
+
+                                    stage('Deploy to Kubernetes'){
+                                        steps {
+                                            sh 'echo Deploying to Kubernetes'
+                                        }
+                                    }
+                                }
+                            }
                     }
                 }
             }
         }
+
+
     }
     post {
         always {
