@@ -8,17 +8,11 @@ pipeline {
     environment {
         CI = 'true'
         HOME = '.'
-        //npm_config_cache = 'npm-cache'
         DOCKER_HUB_PASSWORD = credentials('docker_hub_password')
     }
 
 
     stages {
-        /* stage('Clone git') {
-            steps {
-                git 'https://github.com/stainley/react-portfolio.git'
-            }
-        } */
 
         stage('Install Packages') {
             steps {
@@ -50,10 +44,10 @@ pipeline {
                                   coberturaReportFile: '**/coverage/cobertura-coverage.xml',
                                   failNoReports: true,
                                   classCoverageTargets: '70',
-                                  lineCoverageTargets: '70',
+                                  lineCoverageTargets: '70, 80, 80',
                                   fileCoverageTargets: '70',
                                   sourceEncoding: 'ASCII',
-                                  conditionalCoverageTargets: '70',
+                                  conditionalCoverageTargets: '70, 80, 80',
                                   methodCoverageTargets: '70',
                                   packageCoverageTargets: '70'
                                   )
@@ -72,6 +66,16 @@ pipeline {
                 }
                 timeout(time: 10, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
+                def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+                if (qg.status != 'OK') {
+                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
                 }
             }
         }
