@@ -43,13 +43,13 @@ pipeline {
                                   autoUpdateStability: false,
                                   coberturaReportFile: '**/coverage/cobertura-coverage.xml',
                                   failNoReports: true,
-                                  classCoverageTargets: '70',
-                                  lineCoverageTargets: '70, 80, 80',
+                                  classCoverageTargets: '50',
+                                  lineCoverageTargets: '50, 50, 50',
                                   fileCoverageTargets: '70',
                                   sourceEncoding: 'ASCII',
-                                  conditionalCoverageTargets: '70, 80, 80',
-                                  methodCoverageTargets: '70',
-                                  packageCoverageTargets: '70'
+                                  conditionalCoverageTargets: '50, 50, 50',
+                                  methodCoverageTargets: '50,50, 70',
+                                  packageCoverageTargets: '50, 50, 70'
                                   )
                     }
                 }
