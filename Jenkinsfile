@@ -111,9 +111,10 @@ pipeline {
             when {
                 branch 'master'
             }
-            steps {
+
+            stages {
                 stage('Build Docker Image and Push to Docker Hub') {
-                    step {
+                    steps {
                         sh 'chmod 777 ./jenkins/scripts/deploy-for-production.sh'
                         sh './jenkins/scripts/deploy-for-production.sh'
 
@@ -125,7 +126,7 @@ pipeline {
                 }
 
                 stage('Deploy to Kubernetes'){
-                    step {
+                    steps {
                         sh 'echo Deploying to Kubernetes'
                     }
                 }
