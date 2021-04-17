@@ -5,7 +5,8 @@ const About = ({title, description}) => {
 
     return(
         <div>
-            About Me {description === null? 'Cannot be null': <h1>{description}</h1>};
+            About Me
+            {description === null? <h1>Cannot be null</h1>: <h1>{description}</h1>};
         </div>
     );
 };
