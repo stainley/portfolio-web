@@ -11,7 +11,6 @@ pipeline {
         DOCKER_HUB_PASSWORD = credentials('docker_hub_password')
     }
 
-
     stages {
 
         stage('Install Packages') {
@@ -101,13 +100,19 @@ pipeline {
             parallel {
                 stage('DEV') {
                     stages {
-                        stage('Build and Deploy - QA') {
+                        stage('Docker -Build and Deploy - DEV') {
                             when {
                                 branch 'development'
                             }
                             steps {
-                                sh 'chmod 777 ./jenkins/scripts/deploy-for-qa.sh'
-                                sh './jenkins/scripts/deploy-for-qa.sh'
+                                sh 'chmod 777 ./jenkins/scripts/deploy-for-dev.sh'
+                                sh './jenkins/scripts/deploy-for-dev.sh'
+                            }
+                        }
+
+                        stage('Build Docker Image') {
+                            steps {
+                                sh 'echo'
                             }
                         }
                     }
@@ -123,6 +128,17 @@ pipeline {
                                 sh './jenkins/scripts/deploy-for-qa.sh'
                             }
                         }
+                        stage('Build Docker Image and Push to Docker Hub') {
+                            steps {
+                                sh 'chmod 777 ./jenkins/scripts/deploy-for-production.sh'
+                                sh './jenkins/scripts/deploy-for-production.sh'
+
+                                withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
+                                    sh 'docker login -u $USR --password $DOCKER_HUB_PASSWORD'
+                                    sh 'docker push stainley/portfolio-react:0.1.1'
+                                }
+                            }
+                        }
                     }
                 }
                 stage('PROD') {
@@ -132,32 +148,30 @@ pipeline {
                                 branch 'master'
                             }
 
-                                stages {
-                                    stage('Build Docker Image and Push to Docker Hub') {
-                                        steps {
-                                            sh 'chmod 777 ./jenkins/scripts/deploy-for-production.sh'
-                                            sh './jenkins/scripts/deploy-for-production.sh'
+                            stages {
+                                stage('Build Docker Image and Push to Docker Hub') {
+                                    steps {
+                                        sh 'chmod 777 ./jenkins/scripts/deploy-for-production.sh'
+                                        sh './jenkins/scripts/deploy-for-production.sh'
 
-                                            withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
-                                                sh 'docker login -u $USR --password $DOCKER_HUB_PASSWORD'
-                                                sh 'docker push stainley/portfolio-react:0.1.1'
-                                            }
-                                        }
-                                    }
-
-                                    stage('Deploy to Kubernetes'){
-                                        steps {
-                                            sh 'echo Deploying to Kubernetes'
+                                        withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
+                                            sh 'docker login -u $USR --password $DOCKER_HUB_PASSWORD'
+                                            sh 'docker push stainley/portfolio-react:0.1.1'
                                         }
                                     }
                                 }
+
+                                stage('Deploy to Kubernetes'){
+                                    steps {
+                                        sh 'echo Deploying to Kubernetes'
+                                    }
+                                }
                             }
+                        }
                     }
                 }
             }
         }
-
-
     }
     post {
         always {
