@@ -99,7 +99,7 @@ pipeline {
 
         stage ('Deploy') {
             parallel {
-                stage('QA') {
+                stage('DEV') {
                     stages {
                         stage('Build and Deploy - QA') {
                             when {
@@ -112,7 +112,20 @@ pipeline {
                         }
                     }
                 }
-                stage('Production') {
+                stage('QA') {
+                    stages {
+                        stage('Build and Deploy - QA') {
+                            when {
+                                branch 'quality'
+                            }
+                            steps {
+                                sh 'chmod 777 ./jenkins/scripts/deploy-for-qa.sh'
+                                sh './jenkins/scripts/deploy-for-qa.sh'
+                            }
+                        }
+                    }
+                }
+                stage('PROD') {
                     stages {
                         stage('Build and Deploy - Production') {
                             when {
