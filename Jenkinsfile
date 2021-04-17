@@ -91,7 +91,6 @@ pipeline {
                                     compressLog: true,
                                     recipientProviders: [[$class: 'RequesterRecipientProvider'], [$class:'UpstreamComitterRecipientProvider']]
                                 )
-                            }
                         }
                     }
                 }
