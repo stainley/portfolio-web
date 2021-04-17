@@ -99,11 +99,12 @@ pipeline {
         stage ('Deploy') {
             parallel {
                 stage('DEV') {
+                    when {
+                        branch 'development'
+                    }
                     stages {
                         stage('Docker -Build and Deploy - DEV') {
-                            when {
-                                branch 'development'
-                            }
+
                             steps {
                                 sh 'chmod 777 ./jenkins/scripts/deploy-for-dev.sh'
                                 sh './jenkins/scripts/deploy-for-dev.sh'
@@ -118,11 +119,12 @@ pipeline {
                     }
                 }
                 stage('QA') {
+                    when {
+                        branch 'quality'
+                    }
                     stages {
                         stage('Build and Deploy - QA') {
-                            when {
-                                branch 'quality'
-                            }
+
                             steps {
                                 sh 'chmod 777 ./jenkins/scripts/deploy-for-qa.sh'
                                 sh './jenkins/scripts/deploy-for-qa.sh'
@@ -142,11 +144,11 @@ pipeline {
                     }
                 }
                 stage('PROD') {
+                   when {
+                        branch 'master'
+                    }
                     stages {
                         stage('Build and Deploy - Production') {
-                            when {
-                                branch 'master'
-                            }
 
                             stages {
                                 stage('Build Docker Image and Push to Docker Hub') {
