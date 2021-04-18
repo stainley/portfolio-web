@@ -99,6 +99,12 @@ pipeline {
         stage ('Deploy') {
             parallel {
                 stage('DEV') {
+                    agent {
+                        docker {
+                            image 'node:13.12.0-alpine'
+                            args '-p 3000:3000'
+                        }
+                    }
                     when {
                         branch 'development'
                     }
@@ -106,6 +112,7 @@ pipeline {
                         stage('Docker -Build and Deploy - DEV') {
 
                             steps {
+                                sh 'echo Building Docker Image'
                                 sh 'chmod 777 ./jenkins/scripts/deploy-for-dev.sh'
                                 sh './jenkins/scripts/deploy-for-dev.sh'
                             }
@@ -113,7 +120,7 @@ pipeline {
 
                         stage('Build Docker Image') {
                             steps {
-                                sh 'echo'
+                                sh 'echo Deployed Docker Image'
                             }
                         }
                     }
