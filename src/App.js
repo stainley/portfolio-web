@@ -1,7 +1,8 @@
 import './App.css';
 
 import Navbar from "./component/navbar/Navbar";
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch, useHistory} from 'react-router-dom';
+
 import About from "./component/about/About";
 import Portfolio from "./component/portoflio/Portfolio";
 import {Component} from "react";
@@ -11,6 +12,7 @@ class App extends Component {
 
   render() {
 
+
     const personalInformation = {
       "headline": "Title",
       "description": "Description to be complete"
@@ -19,6 +21,7 @@ class App extends Component {
     const envValue = process.env.REACT_APP_ENV;
 
     return (
+
         <div className="App">
           <Router>
             <Navbar />
