@@ -116,8 +116,7 @@ pipeline {
                     stages {
                         stage('Clear container') {
                             steps {
-                                sh 'docker container stop portfolio-web'
-                                sh 'docker container rm portfolio-web'
+                                sh 'docker container ls -q --filter "name=portfolio-web" | grep -q . && docker container stop portfolio-web && docker container rm -fv portfolio-web'
                             }
                         }
                         stage('Docker -Build and Deploy - DEV') {
