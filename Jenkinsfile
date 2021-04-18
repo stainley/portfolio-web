@@ -115,7 +115,7 @@ pipeline {
                             steps {
                                 sh 'echo Building Docker Image'
                                 sh 'chmod 777 ./jenkins/scripts/deploy-for-dev.sh'
-                                sh './jenkins/scripts/deploy-for-dev.sh BUILD_DEV_ID'
+                                sh './jenkins/scripts/deploy-for-dev.sh $BUILD_DEV_ID'
                             }
                         }
 
