@@ -141,6 +141,12 @@ pipeline {
                         }
                         stage('Wait for user to input text?') {
                             steps {
+                                when {
+                                    currentBuild.result == 'SUCCESS'
+                                }
+
+                                sh 'echo WORKING IN ${env.CHANGE_ID}'
+
                                 script {
                                      // Define Variable
                                     def USER_INPUT = input(
