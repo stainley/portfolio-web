@@ -141,8 +141,8 @@ pipeline {
                         }
                         stage('Wait for user to input text?') {
                             when {
-                                equals{
-                                    "${currentBuild.currentResult}=='SUCCESS'"
+                                expression {
+                                    currentBuild.result == 'SUCCESS'
                                 }
                             }
                             steps {
