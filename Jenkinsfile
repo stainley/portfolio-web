@@ -9,6 +9,7 @@ pipeline {
         CI = 'true'
         HOME = '.'
         DOCKER_HUB_PASSWORD = credentials('docker_hub_password')
+        BUILD_DEV_ID = 'REACT_DEV_BUILD_ID'
     }
 
     stages {
@@ -114,7 +115,7 @@ pipeline {
                             steps {
                                 sh 'echo Building Docker Image'
                                 sh 'chmod 777 ./jenkins/scripts/deploy-for-dev.sh'
-                                sh './jenkins/scripts/deploy-for-dev.sh'
+                                sh './jenkins/scripts/deploy-for-dev.sh BUILD_DEV_ID'
                             }
                         }
 
