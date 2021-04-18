@@ -142,7 +142,7 @@ pipeline {
                         stage('Wait for user to input text?') {
                             when {
                                 expression {
-                                    currentBuild.result == 'SUCCESS'
+                                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
                                 }
                             }
                             steps {
