@@ -1,37 +1,18 @@
 import React from "react";
-import {render, screen} from "@testing-library/react";
+import ReactDOM from 'react-dom';
 import About from "../About";
+import {render} from "@testing-library/react";
 
-describe('Renders', ()=>{
 
-    it('About component do not crash', () => {
-        render(<About />);
+describe('About Component Testing', () => {
 
-        const linkElement = screen.getByText(/About Me/i);
-        expect(linkElement).toBeInTheDocument();
+    it('should not crashing', () => {
+        const div = document.createElement("div");
+        ReactDOM.render(<About />, div);
     });
 
-});
+    it('should has name component', () => {
 
-
-describe('Logic', ()=>{
-
-    it('when description is null', () => {
-        const description = null;
-
-        render(<About description={description}/>);
-
-        const linkElement = screen.getByText('Cannot be null');
-        expect(linkElement).toBeInTheDocument();
+        render(<About />).getByTestId('id-name');
     });
-
-    it('when description is not null', () => {
-        const description = "Description";
-
-        render(<About description={description}/>);
-
-        const linkElement = screen.getByText(description);
-        expect(linkElement).toBeInTheDocument();
-    });
-
 });
