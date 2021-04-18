@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import About from "./component/about/About";
 import Portfolio from "./component/portoflio/Portfolio";
 import {Component} from "react";
+import Home from "./component/home/Home";
 
 class App extends Component {
 
@@ -22,8 +23,6 @@ class App extends Component {
           <Router>
             <Navbar />
             <Switch>
-              <Route path="/">
-              </Route>
               <Route path="/about">
                 <About
                     description={personalInformation.description}
@@ -32,6 +31,9 @@ class App extends Component {
               </Route>
               <Route path="/portfolio">
                 <Portfolio environment={envValue} />
+              </Route>
+              <Route path="/">
+                <Home />
               </Route>
             </Switch>
           </Router>
