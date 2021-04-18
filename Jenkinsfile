@@ -143,7 +143,7 @@ pipeline {
                             steps {
                                 script {
                                      def userInput = input(id: 'userInput', message: 'Merge to?',
-                                     parameters: [[$class: 'ChoiceParameterDefinition', defaultValue: 'strDef',
+                                     parameters: [[$class: 'ChoiceParameterDefinition',
                                         description:'describing choices', name:'nameChoice', choices: "QA\nUAT\nProduction\nDevelop\nMaster"]
                                      ])
 
