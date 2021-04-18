@@ -114,6 +114,12 @@ pipeline {
                         WEBSITE_URL= 'http://192.168.1.50:8085'
                     }
                     stages {
+                        stage('Clear container') {
+                            steps {
+                                sh 'docker container stop portfolio-web'
+                                sh 'docker container rm portfolio-web'
+                            }
+                        }
                         stage('Docker -Build and Deploy - DEV') {
 
                             steps {
