@@ -6,4 +6,4 @@ docker  build -t stainley/portfolio-web-dev:$PORTFOLIO_VERSION -f Dockerfile.dev
 #echo 'building a tag'
 #docker tag portfolio-web-dev stainley/portfolio-web:$PORTFOLIO_VERSION
 echo "Removing intermediate Image for $BUILD_DEV_ID"
- docker rmi "$(docker image ls --filter dangling=true -q)"
+docker rmi "$(docker image ls --filter dangling=true -q)"

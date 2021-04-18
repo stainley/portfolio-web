@@ -115,13 +115,14 @@ pipeline {
                             steps {
                                 sh 'echo Building Docker Image'
                                 sh 'chmod 777 ./jenkins/scripts/deploy-for-dev.sh'
-                                sh './jenkins/scripts/deploy-for-dev.sh $BUILD_DEV_ID'
+                                sh './jenkins/scripts/deploy-for-dev.sh' $BUILD_DEV_ID
                             }
                         }
 
                         stage('Build Docker Image') {
                             steps {
-                                sh 'echo Deployed Docker Image'
+                                sh 'echo Deployed Docker Image' $BUILD_DEV_ID
+                                sh 'docker run -it -d -p 8085:80 --name portfolio-web portfolio-web-de:0.1.2'
                             }
                         }
                     }
