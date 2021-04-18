@@ -122,7 +122,7 @@ pipeline {
                         stage('Build Docker Image') {
                             steps {
                                 sh "echo Deployed Docker Image $BUILD_DEV_ID"
-                                sh 'docker run -it -d -p 8085:80 --name portfolio-web portfolio-web-de:0.1.2'
+                                sh 'docker run -it -d -p 8085:80 --name portfolio-web portfolio-web-dev:0.1.2'
                             }
                         }
                     }
