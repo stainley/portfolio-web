@@ -45,7 +45,7 @@ exports[`rendering components matches snapshot 1`] = `
     <li>
       <a
         className="nav-links"
-        href="/"
+        href="/home"
         onClick={[Function]}
       >
         Home
