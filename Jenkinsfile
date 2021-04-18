@@ -9,7 +9,7 @@ pipeline {
         CI = 'true'
         HOME = '.'
         DOCKER_HUB_PASSWORD = credentials('docker_hub_password')
-        BUILD_DEV_ID = 'REACT_DEV_BUILD_ID'
+        WEBSITE_URL= ''
     }
 
     stages {
@@ -109,6 +109,10 @@ pipeline {
                     when {
                         branch 'development'
                     }
+                    environment {
+                        BUILD_DEV_ID = 'REACT_DEV_BUILD_ID'
+                        WEBSITE_URL= 'http://192.168.1.50:8085'
+                    }
                     stages {
                         stage('Docker -Build and Deploy - DEV') {
 
@@ -122,7 +126,7 @@ pipeline {
                         stage('Build Docker Image') {
                             steps {
                                 sh "echo Deployed Docker Image $BUILD_DEV_ID"
-                                sh 'docker run -it -d -p 8085:80 --name portfolio-web portfolio-web-dev:0.1.2'
+                                sh 'docker run -it -d -p 8085:80 --name portfolio-web stainley/portfolio-web-dev:0.1.2'
                             }
                         }
                     }
@@ -186,7 +190,7 @@ pipeline {
     }
     post {
         always {
-            emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+            emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}\n Web Site: ${env.WEBSITE_URL}",
                             recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
                             subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
         }
