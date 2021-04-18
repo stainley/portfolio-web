@@ -8,12 +8,6 @@ import {Component} from "react";
 
 class App extends Component {
 
-  componentDidMount() {
-    fetch(process.env.REACT_APP_API_URL)
-        .then(response => response.json())
-        .then(users => this.setState({ users }));
-  }
-
   render() {
 
     const personalInformation = {

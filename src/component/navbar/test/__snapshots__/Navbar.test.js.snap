@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`rendering components matches snapshot 1`] = `
+<nav
+  className="NavbarItems"
+  data-testid="navbar-test-id"
+>
+  <h1
+    className="navbar-logo"
+  >
+    Stainley Lebron
+    <a
+      href="https://www.linkedin.com/in/stainleylebron/"
+      rel="noreferrer"
+      target="_blank"
+    >
+      <i
+        className="fab fa-linkedin"
+        id="social"
+      />
+    </a>
+    <a
+      href="https://github.com/stainley"
+      rel="noreferrer"
+      target="_blank"
+    >
+      <i
+        className="fab fa-github"
+        id="social"
+      />
+    </a>
+  </h1>
+  <div
+    className="menu-icon"
+    data-testid="click-icon"
+    onClick={[Function]}
+  >
+    <i
+      className="fas fa-bars"
+    />
+  </div>
+  <ul
+    className="nav-menu"
+  >
+    <li>
+      <a
+        className="nav-links"
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a
+        className="nav-links"
+        href="/about"
+        onClick={[Function]}
+      >
+        About Me
+      </a>
+    </li>
+    <li>
+      <a
+        className="nav-links"
+        href="/portfolio"
+        onClick={[Function]}
+      >
+        Portfolio
+      </a>
+    </li>
+    <li>
+      <a
+        className="nav-links"
+        href="/contact"
+        onClick={[Function]}
+      >
+        Contact Me
+      </a>
+    </li>
+    <li>
+      <a
+        className="nav-links-mobile"
+        href="/"
+        onClick={[Function]}
+      >
+        Sign Up
+      </a>
+    </li>
+  </ul>
+  <button
+    className="btn btn-primary btn--medium"
+  >
+    Sign Up
+  </button>
+</nav>
+`;
