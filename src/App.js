@@ -22,6 +22,8 @@ class App extends Component {
           <Router>
             <Navbar />
             <Switch>
+              <Route path="/">
+              </Route>
               <Route path="/about">
                 <About
                     description={personalInformation.description}

@@ -14,5 +14,3 @@ docker  build --build-arg "$BUILD_ID" -t stainley/portfolio-web-dev:$PORTFOLIO_V
 #docker tag portfolio-web-dev stainley/portfolio-web:$PORTFOLIO_VERSION
 echo "Removing intermediate Image for $BUILD_DEV_ID"
 docker image prune --force --filter label=stage=builder --filter label=build="$BUILD_ID"
-echo "Cleaning dangling image"
-docker rmi "$(docker image ls --filter dangling=true -q) --force"

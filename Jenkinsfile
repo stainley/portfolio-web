@@ -134,6 +134,11 @@ pipeline {
                                 sh 'docker run -it -d -p 8085:80 --name portfolio-web stainley/portfolio-web-dev:0.1.2'
                             }
                         }
+                        stage('Cleaning dangling images') {
+                            steps {
+                                sh "docker rmi $(docker image ls --filter dangling=true -q)"
+                            }
+                        }
                     }
                 }
                 stage('QA') {
