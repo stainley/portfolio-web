@@ -136,7 +136,7 @@ pipeline {
                         }
                         stage('Cleaning dangling images') {
                             steps {
-                                sh "docker rmi $(docker image ls --filter dangling=true -q)"
+                                sh "docker rmi '$(docker image ls --filter dangling=true -q)'"
                             }
                         }
                     }
