@@ -141,11 +141,9 @@ pipeline {
                         }
                         stage('Wait for user to input text?') {
                             when {
-                                currentBuild.currentResult == 'SUCCESS'
+                                currentBuild.currentResult 'SUCCESS'
                             }
                             steps {
-
-
                                 sh 'echo WORKING IN ${env.CHANGE_ID}'
 
                                 script {
