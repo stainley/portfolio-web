@@ -110,7 +110,7 @@ pipeline {
                         branch 'development'
                     }
                     environment {
-                        BUILD_DEV_ID = 'REACT_DEV_BUILD_ID'
+                        BUILD_DEV_ID = 'REACT_BUILD_ID'
                         WEBSITE_URL= 'http://192.168.1.50:8085'
                     }
                     stages {
@@ -128,9 +128,9 @@ pipeline {
                             }
                         }
 
-                        stage('Build Docker Image') {
+                        stage('Run Docker Image') {
                             steps {
-                                sh "echo Deployed Docker Image $BUILD_DEV_ID"
+                                sh "echo Running Docker Image $BUILD_DEV_ID"
                                 sh 'docker run -it -d -p 8085:80 --name portfolio-web stainley/portfolio-web-dev:0.1.2'
                             }
                         }

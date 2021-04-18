@@ -1,6 +1,9 @@
 # build environment
 FROM node:13.12.0-alpine as build
 WORKDIR /app
+ARG BUILD_ID
+LABEL stage=builder
+LABEL build=$BUILD_ID
 ENV PATH /app/node_modules/.bin:$PATH
 #RUN npm install --silent
 COPY package.json ./
