@@ -174,10 +174,14 @@ pipeline {
                                             //sh "scp kubernetes-deploy-dev.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
                                             //sh 'ssh -t -t stainley@192.168.1.100 -o StrictHostKeyChecking=no "cd /Public/kubernetes && microk8s kubectl apply -f kubernetes-deploy-dev.yaml && exit"'
 
-                                            sh 'chmod 777 ./jenkins/scripts/deploy-kubernetes-dev.sh'
-                                            sh './jenkins/scripts/deploy-kubernetes-dev.sh'
-                                        }
+                                            //sh 'chmod 777 ./jenkins/scripts/deploy-kubernetes-dev.sh'
+                                            //sh './jenkins/scripts/deploy-kubernetes-dev.sh'
+                                            sh """ssh -t -t stainley@192.168.1.100 -o StrictHostKeyChecking=no
+                                                 cd Public/kubernetes
+                                                 microk8s kubectl apply -f kubernetes-deploy-dev.yaml
+                                               """
 
+                                        }
                                     } else {
                                         echo "User select NO"
                                    }
