@@ -161,7 +161,7 @@ pipeline {
 
                                     if( "${USER_INPUT}" == "yes"){
                                         echo 'user select YES'
-                                        withCredentials([sshUserPrivateKey(credentialsId: "192.168.1.100")]) {
+                                        withCredentials([sshUserPrivateKey(credentialsId: "kube_master")]) {
                                            stage('scp-f/b') {
                                             sh "scp kubernetes-deploy-dev.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
                                             sh "ssh stainley@192.168.1.100"
