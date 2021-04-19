@@ -100,12 +100,12 @@ pipeline {
         stage ('Deploy') {
             parallel {
                 stage('DEV') {
-                    agent {
+                    /* agent {
                         docker {
                             image 'node:13.12.0-alpine'
                             args '-p 3000:3000'
                         }
-                    }
+                    } */
                     when {
                         branch 'development'
                     }
