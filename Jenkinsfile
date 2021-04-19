@@ -176,11 +176,11 @@ pipeline {
 
                                             //sh 'chmod 777 ./jenkins/scripts/deploy-kubernetes-dev.sh'
                                             //sh './jenkins/scripts/deploy-kubernetes-dev.sh'
-                                            sh """ssh -t -t stainley@192.168.1.100 -o StrictHostKeyChecking=no
+                                            sh """ssh -t -t stainley@192.168.1.100 -o StrictHostKeyChecking=no << EOF
                                                  cd Public/kubernetes
                                                  pwd
                                                  microk8s kubectl apply -f kubernetes-deploy-dev.yaml~.
-                                               """
+                                               EOF"""
 
                                         }
                                     } else {
