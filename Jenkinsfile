@@ -116,6 +116,7 @@ pipeline {
                     stages {
                         stage('Clear container') {
                             steps {
+                                sh 'ssh-agent'
                                 sh 'echo Cleaning Image'
                             }
                         }
