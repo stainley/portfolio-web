@@ -161,6 +161,15 @@ pipeline {
 
                                     if( "${USER_INPUT}" == "yes"){
                                         echo 'user select YES'
+                                        withCredentials([sshUserPrivateKey(credentialsId: "192.168.1.100")]) {
+                                           stage('scp-f/b') {
+                                            sh "scp kubernetes-deploy-dev.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
+                                            sh "ssh stainley@192.168.1.100"
+                                            sh "cd /home/stainley/Public/kubernetes"
+                                            sh "microk8s kubectl apply -f kubernetes-deploy-dev.yaml"
+                                           }
+                                        }
+
                                     } else {
                                         echo "User select NO"
                                    }
