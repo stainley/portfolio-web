@@ -116,7 +116,6 @@ pipeline {
                     stages {
                         stage('Clear container') {
                             steps {
-                                sh 'ssh-agent'
                                 sh 'echo Cleaning Image'
                             }
                         }
@@ -171,8 +170,11 @@ pipeline {
                                            }
                                         } */
                                         sshagent(credentials : ['kube_master']) {
-                                          sh "echo pwd"
-                                          sh 'ssh -t -t stainley@192.168.1.100 -o StrictHostKeyChecking=no "echo pwd"'
+                                            sh 'ssh -t -t stainley@192.168.1.100 -o StrictHostKeyChecking=no "echo pwd"'
+                                            sh "scp kubernetes-deploy-dev.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
+                                            sh "ssh stainley@192.168.1.100"
+                                            sh "cd /home/stainley/Public/kubernetes"
+                                            sh "microk8s kubectl apply -f kubernetes-deploy-dev.yaml"
                                         }
 
                                     } else {
