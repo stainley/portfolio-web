@@ -48,7 +48,7 @@ pipeline {
                                   lineCoverageTargets: '60, 70, 80',
                                   fileCoverageTargets: '70',
                                   sourceEncoding: 'ASCII',
-                                  conditionalCoverageTargets: '80, 60, 40',
+                                  conditionalCoverageTargets: '80, 50, 40',
                                   methodCoverageTargets: '80,60, 50',
                                   packageCoverageTargets: '80, 60, 50'
                         )
@@ -227,55 +227,10 @@ pipeline {
                             env.BRANCH_NAME.startsWith('PR')
                         }
                     }
-                    environment {
-                        BUILD_DEV_ID = 'REACT_BUILD_ID'
-                        WEBSITE_URL= 'http://stainley.minexsoft.com'
-                    }
                     stages {
                         stage('Clear container') {
                             steps {
-                                sh 'echo Cleaning Image'
-                            }
-                        }
-                        stage('Docker -Build and Deploy - Prod') {
-                            steps {
-                                sh 'echo Building Docker Image'
-                                sh 'chmod 777 ./jenkins/scripts/deploy-for-prod.sh'
-                                sh "./jenkins/scripts/deploy-for-prod.sh $APP_VERSION_ID"
-                            }
-                        }
-                        stage('Cleaning dangling images') {
-                            steps {
-                                sh 'docker rmi \$(docker image ls --filter dangling=true -q)'
-                            }
-                        }
-                        stage('Deploy to Kubernetes?') {
-                            when {
-                                expression {
-                                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
-                                }
-                            }
-                            steps {
-                                script {
-                                    def USER_INPUT = input(message: 'Would you like to deploy to Kubernetes - Some Yes or No question?',
-                                                    parameters: [[$class: 'ChoiceParameterDefinition',
-                                                            choices: ['no','yes'].join('\n'), name: 'input',
-                                                            description: 'Menu - select box option']])
-
-
-                                    if( "${USER_INPUT}" == "yes"){
-                                        sshagent(credentials : ['kube_master']) {
-                                            sh "scp kubernetes-deploy.yaml saiyamans@minexsoft.com:/home/saiyamans/kubernetes/portfolio"
-                                            sh """ssh -t saiyamans@minexsoft.com -o StrictHostKeyChecking=no << EOF
-                                                cd Public/kubernetes
-                                                microk8s kubectl apply -f kubernetes-deploy.yaml
-                                                exit
-                                                EOF"""
-                                        }
-                                    } else {
-                                        echo "User select NO"
-                                    }
-                                }
+                                sh 'echo Doing PULL REQUEST'
                             }
                         }
                     }
