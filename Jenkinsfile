@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_VERSION = '0.1.3'
+        APP_VERSION_ID = '0.1.3'
         CI = 'true'
         HOME = '.'
         DOCKER_HUB_PASSWORD = credentials('docker_hub_password')
@@ -116,13 +116,13 @@ pipeline {
                     steps {
                         sh 'echo Building Docker Image'
                         sh 'chmod 777 ./jenkins/scripts/deploy-for-dev.sh'
-                        sh "./jenkins/scripts/deploy-for-dev.sh $BUILD_DEV_ID"
+                        sh "./jenkins/scripts/deploy-for-dev.sh $APP_VERSION_ID"
                     }
                 }
                 stage('Run Docker Image') {
                     steps {
                         sh "echo Running Docker Image $BUILD_DEV_ID"
-                        sh 'docker run -it -d -p 8085:80 --name portfolio-web stainley/portfolio-web-dev:0.1.2'
+                        sh 'docker run -it -d -p 8085:80 --name portfolio-web stainley/portfolio-web-dev:$APP_VERSION_ID'
                     }
                 }
                 stage('Cleaning dangling images') {

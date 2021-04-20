@@ -1,47 +1,15 @@
 #!/usr/bin/env sh
-PORTFOLIO_VERSION=0.1.1
-echo 'Building Docker Image'
-docker  build -t portfolio-prod -f Dockerfile.dev .
-echo 'building a tag'
-docker tag portfolio-prod stainley/portfolio-react:$PORTFOLIO_VERSION
-#docker push portfolio-prod stainley/img-portfolio:0.1.0
+echo 'Building Image for PRODUCTION'
+PORTFOLIO_VERSION=$APP_VERSION_ID
+
+echo "Cleaning Container: " docker container ls -q --filter "name=portfolio-web"
+docker container ls -q --filter "name=portfolio-web" | grep -q . && docker container stop portfolio-web && docker container rm -fv portfolio-web
 
 
-echo 'The following "npm" command builds your Node.js/React application for'
-echo 'production in the local "build" directory (i.e. within the appropriate'
-echo 'subdirectory of "/var/jenkins_home/workspace/"), correctly bundles React'
-echo 'in production mode and optimizes the build for the best performance.'
-#set -x
-#npm run build
-#set +x
-
-echo 'The following "npm" command downloads and installs the npm serve module'
-echo '(for serving static sites in production environments) to the local'
-echo '"node_modules" directory (i.e. within the appropriate subdirectory of'
-echo '"/var/jenkins_home/workspace/"), which means that this module should not'
-echo 'need to be downloaded after this Pipeline''s initial run for a given'
-echo 'branch.'
-#set -x
-#npm install serve
-#set +x
-
-echo 'The following "serve" command runs the npm serve module (downloaded'
-echo 'above) deploys your Node.js/React application (built above in production'
-echo 'mode) for production and makes the application available for web browsing.'
-echo 'The "serve" command has a trailing ampersand so that the command runs'
-echo 'as a background process (i.e. asynchronously). Otherwise, this command'
-echo 'can pause running builds of CI/CD applications indefinitely. "serve"'
-echo 'is followed by another command that retrieves the process ID (PID) value'
-echo 'of the previously run process (i.e. "serve") and writes this value to'
-echo 'the file ".pidfile".'
-#set -x
-#./node_modules/serve/bin/serve.js -c 0 -s build &
-#sleep 1
-#echo $! > .pidfile
-#set +x
-
-echo 'Now...'
-echo 'Visit http://localhost:5000 to see your Node.js/React application in action.'
-echo '(This is why you specified the "args ''-p 5000:5000''" parameter when you'
-echo 'created your initial Pipeline as a Jenkinsfile.)'
-
+echo "Building Docker Image $PORTFOLIO_VERSION"
+#docker  build -t stainley/portfolio-web-dev:$PORTFOLIO_VERSION -f Dockerfile.dev .
+docker  build --build-arg "$PORTFOLIO_VERSION" -t stainley/portfolio-web:"$PORTFOLIO_VERSION" -f Dockerfile.prod .
+#echo 'building a tag'
+#docker tag portfolio-web-dev stainley/portfolio-web:$PORTFOLIO_VERSION
+echo "Removing intermediate Image for $PORTFOLIO_VERSION"
+docker image prune --force --filter label=stage=builder --filter label=build="$PORTFOLIO_VERSION"
