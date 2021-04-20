@@ -230,7 +230,7 @@ pipeline {
                     stages {
                         stage('Clear container') {
                             steps {
-                                sh 'echo Doing PULL REQUEST'
+                                sh 'echo Doing PULL REQUEST Francisco'
                             }
                         }
                     }
