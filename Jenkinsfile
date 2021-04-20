@@ -7,6 +7,7 @@ pipeline {
 
     environment {
         APP_VERSION_ID = '0.1.3'
+        REACT_APP_NAME='portfolio-web'
         CI = 'true'
         HOME = '.'
         DOCKER_HUB_PASSWORD = credentials('docker_hub_password')
@@ -180,7 +181,7 @@ pipeline {
                     steps {
                         sh 'echo Building Docker Image'
                         sh 'chmod 777 ./jenkins/scripts/deploy-for-prod.sh'
-                        sh "./jenkins/scripts/deploy-for-prod.sh $APP_VERSION_ID"
+                        sh "./jenkins/scripts/deploy-for-prod.sh $APP_VERSION_ID $REACT_APP_NAME"
                     }
                 }
                 stage('Cleaning dangling images') {
