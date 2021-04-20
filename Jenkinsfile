@@ -48,7 +48,7 @@ pipeline {
                                   lineCoverageTargets: '60, 70, 80',
                                   fileCoverageTargets: '70',
                                   sourceEncoding: 'ASCII',
-                                  conditionalCoverageTargets: '50, 70, 80',
+                                  conditionalCoverageTargets: '90, 80, 50',
                                   methodCoverageTargets: '60,70, 80',
                                   packageCoverageTargets: '60, 70, 80'
                         )
