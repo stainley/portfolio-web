@@ -44,7 +44,7 @@ pipeline {
                                   autoUpdateStability: false,
                                   coberturaReportFile: '**/coverage/cobertura-coverage.xml',
                                   failNoReports: true,
-                                  classCoverageTargets: '80',
+                                  classCoverageTargets: '50',
                                   lineCoverageTargets: '60, 70, 80',
                                   fileCoverageTargets: '70',
                                   sourceEncoding: 'ASCII',
