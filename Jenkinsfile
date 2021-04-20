@@ -181,7 +181,10 @@ pipeline {
                     steps {
                         sh 'echo Building Docker Image'
                         sh 'chmod 777 ./jenkins/scripts/deploy-for-prod.sh'
-                        sh "./jenkins/scripts/deploy-for-prod.sh $APP_VERSION_ID $REACT_APP_NAME"
+                        withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
+                            sh 'docker login -u $USR --password $DOCKER_HUB_PASSWORD'
+                            sh "./jenkins/scripts/deploy-for-prod.sh $REACT_APP_NAME $APP_VERSION_ID"
+                        }
                     }
                 }
                 stage('Cleaning dangling images') {
@@ -205,6 +208,7 @@ pipeline {
 
                             if( "${USER_INPUT}" == "yes"){
                                 sshagent(credentials : ['servercheap']) {
+
                                     sh "scp kubernetes-deploy.yaml saiyamans@minexsoft.com:/home/saiyamans/kubernetes/portfolio"
                                     sh """ssh -t saiyamans@minexsoft.com -o StrictHostKeyChecking=no << EOF
                                         cd Public/kubernetes
