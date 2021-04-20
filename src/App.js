@@ -1,27 +1,48 @@
-import logo from './logo.svg';
 import './App.css';
-import Navbar from "./component/Navbar/Navbar";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <Navbar />
-      </header>
-    </div>
-  );
+import Navbar from "./component/navbar/Navbar";
+import {BrowserRouter as Router, Route, Switch, useHistory} from 'react-router-dom';
+
+import About from "./component/about/About";
+import Portfolio from "./component/portoflio/Portfolio";
+import {Component} from "react";
+import Home from "./component/home/Home";
+
+class App extends Component {
+
+  render() {
+
+
+    const personalInformation = {
+      "headline": "Title",
+      "description": "Description to be complete"
+    };
+
+    const envValue = process.env.REACT_APP_ENV;
+
+    return (
+
+        <div className="App">
+          <Router>
+            <Navbar />
+            <Switch>
+              <Route path="/about">
+                <About
+                    description={personalInformation.description}
+                    headline={personalInformation.headline}
+                />
+              </Route>
+              <Route path="/portfolio">
+                <Portfolio environment={envValue} />
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </Router>
+        </div>
+    );
+  }
 }
 
 export default App;

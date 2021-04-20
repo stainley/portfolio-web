@@ -6,11 +6,12 @@ pipeline {
     }
 
     environment {
+        APP_VERSION_ID = '0.1.3'
         CI = 'true'
         HOME = '.'
         DOCKER_HUB_PASSWORD = credentials('docker_hub_password')
+        WEBSITE_URL= ''
     }
-
 
     stages {
 
@@ -44,13 +45,13 @@ pipeline {
                                   coberturaReportFile: '**/coverage/cobertura-coverage.xml',
                                   failNoReports: true,
                                   classCoverageTargets: '50',
-                                  lineCoverageTargets: '50, 50, 50',
+                                  lineCoverageTargets: '60, 70, 80',
                                   fileCoverageTargets: '70',
                                   sourceEncoding: 'ASCII',
-                                  conditionalCoverageTargets: '50, 50, 50',
-                                  methodCoverageTargets: '50,50, 60',
-                                  packageCoverageTargets: '50, 50, 60'
-                                  )
+                                  conditionalCoverageTargets: '80, 50, 40',
+                                  methodCoverageTargets: '80,60, 50',
+                                  packageCoverageTargets: '80, 60, 50'
+                        )
                     }
                 }
             }
@@ -96,72 +97,148 @@ pipeline {
                 }
             }
         }
-
-        stage ('Deploy') {
-            parallel {
-                stage('DEV') {
-                    stages {
-                        stage('Build and Deploy - QA') {
-                            when {
-                                branch 'development'
-                            }
-                            steps {
-                                sh 'chmod 777 ./jenkins/scripts/deploy-for-qa.sh'
-                                sh './jenkins/scripts/deploy-for-qa.sh'
-                            }
-                        }
+/////////////////////////////////////////// DEV ////////////////////////////////////////
+        stage ('Dev') {
+            when {
+                branch 'development'
+            }
+            environment {
+                BUILD_DEV_ID = 'REACT_BUILD_ID'
+                WEBSITE_URL= 'http://192.168.1.50:8085'
+            }
+            stages {
+                stage('Clear container') {
+                    steps {
+                        sh 'echo Cleaning Image'
                     }
                 }
-                stage('QA') {
-                    stages {
-                        stage('Build and Deploy - QA') {
-                            when {
-                                branch 'quality'
-                            }
-                            steps {
-                                sh 'chmod 777 ./jenkins/scripts/deploy-for-qa.sh'
-                                sh './jenkins/scripts/deploy-for-qa.sh'
-                            }
-                        }
+                stage('Docker -Build and Deploy - DEV') {
+                    steps {
+                        sh 'echo Building Docker Image'
+                        sh 'chmod 777 ./jenkins/scripts/deploy-for-dev.sh'
+                        sh "./jenkins/scripts/deploy-for-dev.sh $APP_VERSION_ID"
                     }
                 }
-                stage('PROD') {
-                    stages {
-                        stage('Build and Deploy - Production') {
-                            when {
-                                branch 'master'
-                            }
+                stage('Run Docker Image') {
+                    steps {
+                        sh "echo Running Docker Image $APP_VERSION_ID"
+                        sh 'docker run -it -d -p 8085:80 --name portfolio-web stainley/portfolio-web-dev:$APP_VERSION_ID'
+                    }
+                }
+                stage('Cleaning dangling images') {
+                    steps {
+                        sh 'docker rmi \$(docker image ls --filter dangling=true -q)'
+                    }
+                }
+                stage('Deploy to Kubernetes?') {
+                    when {
+                        expression {
+                            currentBuild.result == null || currentBuild.result == 'SUCCESS'
+                        }
+                    }
+                    steps {
+                        script {
+                            def USER_INPUT = input(message: 'Would you like to deploy to Kubernetes - Some Yes or No question?',
+                                            parameters: [[$class: 'ChoiceParameterDefinition',
+                                                    choices: ['no','yes'].join('\n'), name: 'input',
+                                                    description: 'Menu - select box option']])
 
-                                stages {
-                                    stage('Build Docker Image and Push to Docker Hub') {
-                                        steps {
-                                            sh 'chmod 777 ./jenkins/scripts/deploy-for-production.sh'
-                                            sh './jenkins/scripts/deploy-for-production.sh'
 
-                                            withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
-                                                sh 'docker login -u $USR --password $DOCKER_HUB_PASSWORD'
-                                                sh 'docker push stainley/portfolio-react:0.1.1'
-                                            }
-                                        }
-                                    }
-
-                                    stage('Deploy to Kubernetes'){
-                                        steps {
-                                            sh 'echo Deploying to Kubernetes'
-                                        }
-                                    }
+                            if( "${USER_INPUT}" == "yes"){
+                                sshagent(credentials : ['kube_master']) {
+                                    sh "scp kubernetes-deploy.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
+                                    sh """ssh -t stainley@192.168.1.100 -o StrictHostKeyChecking=no << EOF
+                                        cd Public/kubernetes
+                                        microk8s kubectl apply -f kubernetes-deploy.yaml
+                                        exit
+                                        EOF"""
                                 }
+                            } else {
+                                echo "User select NO"
                             }
+                        }
+                    }
+                }
+            }
+        }
+    /////////////////////////////////////////////////////// PROD //////////////////////////////////////////////
+        stage ('Prod') {
+            when {
+                branch 'master'
+            }
+            environment {
+                BUILD_DEV_ID = 'REACT_BUILD_ID'
+                WEBSITE_URL= 'http://stainley.minexsoft.com'
+            }
+            stages {
+                stage('Clear container') {
+                    steps {
+                        sh 'echo Cleaning Image'
+                    }
+                }
+                stage('Docker -Build and Deploy - Prod') {
+                    steps {
+                        sh 'echo Building Docker Image'
+                        sh 'chmod 777 ./jenkins/scripts/deploy-for-prod.sh'
+                        sh "./jenkins/scripts/deploy-for-prod.sh $APP_VERSION_ID"
+                    }
+                }
+                stage('Cleaning dangling images') {
+                    steps {
+                        sh 'docker rmi \$(docker image ls --filter dangling=true -q)'
+                    }
+                }
+                stage('Deploy to Kubernetes?') {
+                    when {
+                        expression {
+                            currentBuild.result == null || currentBuild.result == 'SUCCESS'
+                        }
+                    }
+                    steps {
+                        script {
+                            def USER_INPUT = input(message: 'Would you like to deploy to Kubernetes - Some Yes or No question?',
+                                            parameters: [[$class: 'ChoiceParameterDefinition',
+                                                    choices: ['no','yes'].join('\n'), name: 'input',
+                                                    description: 'Menu - select box option']])
+
+
+                            if( "${USER_INPUT}" == "yes"){
+                                sshagent(credentials : ['kube_master']) {
+                                    sh "scp kubernetes-deploy.yaml saiyamans@minexsoft.com:/home/saiyamans/kubernetes/portfolio"
+                                    sh """ssh -t saiyamans@minexsoft.com -o StrictHostKeyChecking=no << EOF
+                                        cd Public/kubernetes
+                                        microk8s kubectl apply -f kubernetes-deploy.yaml
+                                        exit
+                                        EOF"""
+                                }
+                            } else {
+                                echo "User select NO"
+                            }
+                        }
                     }
                 }
             }
         }
 
+        stage ('Pull Request') {
 
+                    when {
+                        expression {
+                            env.BRANCH_NAME.startsWith('PR')
+                        }
+                    }
+                    stages {
+                        stage('Clear container') {
+                            steps {
+                                sh 'echo Doing PULL REQUEST'
+                            }
+                        }
+                    }
+                }
     }
     post {
         always {
-            emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+            emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}\n Web Site: ${env.CHANGE_ID}",
                             recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
                             subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
         }

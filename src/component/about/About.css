@@ -1,0 +1,12 @@
+.about-ui {
+    background-color: rgba(71, 80, 97, 0.87);
+    font-size: large;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    margin: auto;
+    height: 100%;
+    padding: 12px;
+    color: white;
+    text-align: center;
+    top: 18px;
+}
