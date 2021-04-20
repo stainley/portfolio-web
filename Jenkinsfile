@@ -203,7 +203,7 @@ pipeline {
 
 
                             if( "${USER_INPUT}" == "yes"){
-                                sshagent(credentials : ['kube_master']) {
+                                sshagent(credentials : ['servercheap']) {
                                     sh "scp kubernetes-deploy.yaml saiyamans@minexsoft.com:/home/saiyamans/kubernetes/portfolio"
                                     sh """ssh -t saiyamans@minexsoft.com -o StrictHostKeyChecking=no << EOF
                                         cd Public/kubernetes
