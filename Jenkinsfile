@@ -44,13 +44,13 @@ pipeline {
                                   autoUpdateStability: false,
                                   coberturaReportFile: '**/coverage/cobertura-coverage.xml',
                                   failNoReports: true,
-                                  classCoverageTargets: '50',
-                                  lineCoverageTargets: '50, 50, 50',
+                                  classCoverageTargets: '80',
+                                  lineCoverageTargets: '60, 70, 80',
                                   fileCoverageTargets: '70',
                                   sourceEncoding: 'ASCII',
-                                  conditionalCoverageTargets: '50, 50, 50',
-                                  methodCoverageTargets: '50,50, 60',
-                                  packageCoverageTargets: '50, 50, 60'
+                                  conditionalCoverageTargets: '600, 70, 80',
+                                  methodCoverageTargets: '60,70, 80',
+                                  packageCoverageTargets: '60, 70, 80'
                         )
                     }
                 }
@@ -121,7 +121,7 @@ pipeline {
                 }
                 stage('Run Docker Image') {
                     steps {
-                        sh "echo Running Docker Image $BUILD_DEV_ID"
+                        sh "echo Running Docker Image $APP_VERSION_ID"
                         sh 'docker run -it -d -p 8085:80 --name portfolio-web stainley/portfolio-web-dev:$APP_VERSION_ID'
                     }
                 }
@@ -146,10 +146,10 @@ pipeline {
 
                             if( "${USER_INPUT}" == "yes"){
                                 sshagent(credentials : ['kube_master']) {
-                                    sh "scp kubernetes-deploy-dev.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
+                                    sh "scp kubernetes-deploy.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
                                     sh """ssh -t stainley@192.168.1.100 -o StrictHostKeyChecking=no << EOF
                                         cd Public/kubernetes
-                                        microk8s kubectl apply -f kubernetes-deploy-dev.yaml
+                                        microk8s kubectl apply -f kubernetes-deploy.yaml
                                         exit
                                         EOF"""
                                 }
@@ -180,7 +180,7 @@ pipeline {
                     steps {
                         sh 'echo Building Docker Image'
                         sh 'chmod 777 ./jenkins/scripts/deploy-for-prod.sh'
-                        sh "./jenkins/scripts/deploy-for-prod.sh $BUILD_DEV_ID"
+                        sh "./jenkins/scripts/deploy-for-prod.sh $APP_VERSION_ID"
                     }
                 }
                 stage('Cleaning dangling images') {
@@ -204,10 +204,10 @@ pipeline {
 
                             if( "${USER_INPUT}" == "yes"){
                                 sshagent(credentials : ['kube_master']) {
-                                    sh "scp kubernetes-deploy-dev.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
-                                    sh """ssh -t stainley@192.168.1.100 -o StrictHostKeyChecking=no << EOF
+                                    sh "scp kubernetes-deploy.yaml saiyamans@minexsoft.com:/home/saiyamans/kubernetes/portfolio"
+                                    sh """ssh -t saiyamans@minexsoft.com -o StrictHostKeyChecking=no << EOF
                                         cd Public/kubernetes
-                                        microk8s kubectl apply -f kubernetes-deploy-dev.yaml
+                                        microk8s kubectl apply -f kubernetes-deploy.yaml
                                         exit
                                         EOF"""
                                 }
@@ -227,4 +227,3 @@ pipeline {
                             subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
         }
     }
-}
