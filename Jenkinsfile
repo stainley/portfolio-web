@@ -211,7 +211,7 @@ pipeline {
 
                                     sh "scp -o StrictHostKeyChecking=no kubernetes-deploy.yaml saiyamans@minexsoft.com:/home/saiyamans/kubernetes/portfolio"
                                     sh """ssh -t saiyamans@minexsoft.com -o StrictHostKeyChecking=no << EOF
-                                        cd Public/kubernetes
+                                        cd /home/saiyamans/kubernetes/portfolio
                                         microk8s kubectl apply -f kubernetes-deploy.yaml
                                         exit
                                         EOF"""
