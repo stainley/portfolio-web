@@ -128,7 +128,7 @@ pipeline {
                 }
                 stage('Cleaning dangling images') {
                     steps {
-                        sh 'docker rmi \$(docker image ls --filter dangling=true -q)'
+                        sh 'docker rmi $(docker image ls --filter dangling=true -q)'
                     }
                 }
                 stage('Deploy to Kubernetes?') {
@@ -189,7 +189,7 @@ pipeline {
                 }
                 stage('Cleaning dangling images') {
                     steps {
-                        sh 'docker rmi \$(docker image ls --filter dangling=true -q)'
+                        sh 'docker rmi $(docker image ls --filter dangling=true -q)'
                     }
                 }
                 stage('Deploy to Kubernetes?') {
@@ -209,7 +209,7 @@ pipeline {
                             if( "${USER_INPUT}" == "yes"){
                                 sshagent(credentials : ['servercheap']) {
 
-                                    sh "scp kubernetes-deploy.yaml saiyamans@minexsoft.com:/home/saiyamans/kubernetes/portfolio"
+                                    sh "scp -o StrictHostKeyChecking=no kubernetes-deploy.yaml saiyamans@minexsoft.com:/home/saiyamans/kubernetes/portfolio"
                                     sh """ssh -t saiyamans@minexsoft.com -o StrictHostKeyChecking=no << EOF
                                         cd Public/kubernetes
                                         microk8s kubectl apply -f kubernetes-deploy.yaml
