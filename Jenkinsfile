@@ -117,13 +117,13 @@ pipeline {
                     steps {
                         sh 'echo Building Docker Image'
                         sh 'chmod 777 ./jenkins/scripts/deploy-for-dev.sh'
-                        sh "./jenkins/scripts/deploy-for-dev.sh $APP_VERSION_ID"
+                        sh "./jenkins/scripts/deploy-for-dev.sh $REACT_APP_NAME $APP_VERSION_ID"
                     }
                 }
                 stage('Run Docker Image') {
                     steps {
-                        sh "echo Running Docker Image $APP_VERSION_ID"
-                        sh 'docker run -it -d -p 8085:80 --name portfolio-web stainley/portfolio-web-dev:$APP_VERSION_ID'
+                        sh "echo Running Docker Image $REACT_APP_NAME:$APP_VERSION_ID"
+                        sh 'docker run -it -d -p 8085:80 --name $REACT_APP_NAME stainley/portfolio-web-dev:$APP_VERSION_ID'
                     }
                 }
                 stage('Cleaning dangling images') {
