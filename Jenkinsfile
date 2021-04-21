@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_VERSION_ID = '0.1.3'
+        APP_VERSION_ID = '0.1.5'
         REACT_APP_NAME='portfolio-web'
         CI = 'true'
         HOME = '.'

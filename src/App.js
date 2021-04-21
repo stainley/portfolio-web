@@ -1,21 +1,17 @@
 import './App.css';
 
-import Navbar from "./component/navbar/Navbar";
-import {BrowserRouter as Router, Route, Switch, useHistory} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
-import About from "./component/about/About";
-import Portfolio from "./component/portoflio/Portfolio";
-import {Component} from "react";
+import About from "./component/About/About";
+import Navbar from "./component/Navbar/Navbar";
+import Portfolio from "./component/Portoflio/Portfolio";
 import Home from "./component/home/Home";
 
-class App extends Component {
-
-  render() {
-
+const App = () => {
 
     const personalInformation = {
-      "headline": "Title",
-      "description": "Description to be complete"
+        "headline": "Title",
+        "description": "Description to be complete"
     };
 
     const envValue = process.env.REACT_APP_ENV;
@@ -23,26 +19,25 @@ class App extends Component {
     return (
 
         <div className="App">
-          <Router>
-            <Navbar />
-            <Switch>
-              <Route path="/about">
-                <About
-                    description={personalInformation.description}
-                    headline={personalInformation.headline}
-                />
-              </Route>
-              <Route path="/portfolio">
-                <Portfolio environment={envValue} />
-              </Route>
-              <Route path="/">
-                <Home />
-              </Route>
-            </Switch>
-          </Router>
+            <Router>
+                <Navbar/>
+                <Switch>
+                    <Route path="/about">
+                        <About
+                            description={personalInformation.description}
+                            headline={personalInformation.headline}
+                        />
+                    </Route>
+                    <Route path="/portfolio">
+                        <Portfolio environment={envValue}/>
+                    </Route>
+                    <Route path="/">
+                        <Home/>
+                    </Route>
+                </Switch>
+            </Router>
         </div>
     );
-  }
 }
 
 export default App;
