@@ -189,7 +189,13 @@ pipeline {
                 }
                 stage('Cleaning dangling images') {
                     steps {
-                        sh 'docker rmi $(docker image ls --filter dangling=true -q)'
+                        script {
+                            def RESULT = sh 'docker image ls --filter dangling=true -q'
+                            if ("${RESULT}" != "") {
+                                sh 'docker rmi $(docker image ls --filter dangling=true -q)'
+                            }
+                        }
+
                     }
                 }
                 stage('Deploy to Kubernetes?') {
