@@ -195,6 +195,7 @@ pipeline {
                                 sh 'docker rmi $(docker image ls --filter dangling=true -q)'
                             }
                         }
+
                     }
                 }
                 stage('Deploy to Kubernetes?') {
