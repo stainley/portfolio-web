@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: portafolio-web
-          image: stainley/portfolio-react
+          image: stainley/portfolio-web
           imagePullPolicy: Always
           ports:
             - containerPort: 80
