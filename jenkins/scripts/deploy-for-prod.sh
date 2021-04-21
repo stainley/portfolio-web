@@ -16,5 +16,4 @@ echo "Removing intermediate Image for $APP_NAME:$PORTFOLIO_VERSION"
 docker image prune --force --filter label=stage=builder --filter label=build="$PORTFOLIO_VERSION"
 
 echo "Uploading image to Docker Hub: stainley/$APP_NAME:$PORTFOLIO_VERSION"
-docker push "stainley/$APP_NAME:$PORTFOLIO_VERSION stainley/$APP_NAME:latest"
-echo "----- Docker Image uploaded to Docker Hub successfully ----"
+

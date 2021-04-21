@@ -181,9 +181,12 @@ pipeline {
                     steps {
                         sh 'echo Building Docker Image'
                         sh 'chmod 777 ./jenkins/scripts/deploy-for-prod.sh'
+                        sh "./jenkins/scripts/deploy-for-prod.sh $REACT_APP_NAME $APP_VERSION_ID"
+
                         withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
                             sh 'docker login -u $USR --password $DOCKER_HUB_PASSWORD'
-                            sh "./jenkins/scripts/deploy-for-prod.sh $REACT_APP_NAME $APP_VERSION_ID"
+                            sh "docker push stainley/$REACT_APP_NAME:$APP_VERSION_ID stainley/$REACT_APP_NAME:latest"
+                            echo "----- Docker Image uploaded to Docker Hub successfully ----"
                         }
                     }
                 }
