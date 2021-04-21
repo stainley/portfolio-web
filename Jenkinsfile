@@ -185,7 +185,7 @@ pipeline {
 
                         withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
                             sh 'docker login -u $USR --password $DOCKER_HUB_PASSWORD'
-                            sh "docker push stainley/$REACT_APP_NAME:$APP_VERSION_ID stainley/$REACT_APP_NAME:latest"
+                            sh "docker push stainley/$REACT_APP_NAME"
                             echo "----- Docker Image uploaded to Docker Hub successfully ----"
                         }
                     }
