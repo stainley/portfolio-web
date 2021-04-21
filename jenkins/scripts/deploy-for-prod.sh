@@ -9,7 +9,7 @@ docker container ls -q --filter "name=$APP_NAME" | grep -q . && docker container
 
 echo "Building Docker Image $PORTFOLIO_VERSION"
 #docker  build -t stainley/portfolio-web-dev:$PORTFOLIO_VERSION -f Dockerfile.dev .
-docker  build --build-arg "$PORTFOLIO_VERSION" -t "stainley/$APP_NAME:$PORTFOLIO_VERSION stainley/$APP_NAME:latest" -f Dockerfile.prod .
+docker  build --build-arg "$PORTFOLIO_VERSION" -t "stainley/$APP_NAME:$PORTFOLIO_VERSION " -t "stainley/$APP_NAME:latest" -f Dockerfile.prod .
 #echo 'building a tag'
 
 echo "Removing intermediate Image for $APP_NAME:$PORTFOLIO_VERSION"
