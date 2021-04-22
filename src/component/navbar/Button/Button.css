@@ -14,7 +14,6 @@
     transition: all 0.3s ease-out;
     background: #ffff;
     color: #6558f4;
-    transition: 250ms;
 }
 
 .btn--primary {

@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_VERSION_ID = '0.1.3'
+        APP_VERSION_ID = '0.1.5'
         REACT_APP_NAME='portfolio-web'
         CI = 'true'
         HOME = '.'
@@ -131,6 +131,15 @@ pipeline {
                         sh 'docker rmi $(docker image ls --filter dangling=true -q)'
                     }
                 }
+                stage('Upload to Docker Hub QA Image') {
+                    steps {
+                        withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'PWD', usernameVariable: 'USR')]){
+                            sh 'docker login -u $USR --password $DOCKER_HUB_PASSWORD'
+                            sh "docker push stainley/$REACT_APP_NAME-dev"
+                            echo "----- Docker Image uploaded to Docker Hub successfully ----"
+                        }
+                    }
+                }
                 stage('Deploy to Kubernetes?') {
                     when {
                         expression {
@@ -147,10 +156,10 @@ pipeline {
 
                             if( "${USER_INPUT}" == "yes"){
                                 sshagent(credentials : ['kube_master']) {
-                                    sh "scp kubernetes-deploy.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
+                                    sh "scp ./kubernetes/kubernetes-deploy-qa.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
                                     sh """ssh -t stainley@192.168.1.100 -o StrictHostKeyChecking=no << EOF
                                         cd Public/kubernetes
-                                        microk8s kubectl apply -f kubernetes-deploy.yaml
+                                        microk8s kubectl apply -f kubernetes-deploy-qa.yaml
                                         exit
                                         EOF"""
                                 }
