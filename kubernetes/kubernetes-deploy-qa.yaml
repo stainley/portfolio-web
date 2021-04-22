@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: portafolio-web
-          image: localhost:5000/portfolio-web-dev
+          image: stainley/portfolio-web-dev
           imagePullPolicy: Always
           ports:
             - containerPort: 80
