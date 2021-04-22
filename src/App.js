@@ -2,9 +2,9 @@ import './App.css';
 
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
-import About from "./component/About/About";
-import Navbar from "./component/Navbar/Navbar"
-import Portfolio from './component/Portoflio/Portfolio'
+import About from "./component/about/About";
+import Navbar from "./component/navbar/Navbar"
+import Portfolio from './component/portoflio/Portfolio'
 import Home from './component/home/Home';
 
 const App = () => {
