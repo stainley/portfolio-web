@@ -145,17 +145,21 @@ a {
 
 a:link {
     text-decoration: none;
+    text-decoration-color: white;
+    background-color: inherit;
+    color: white;
 }
+
 
 a:visited {
     text-decoration: none;
     text-decoration-color: white;
     background-color: inherit;
-    color: white;
 }
 
 #social:hover{
     transform: scale(1.6);
     transition: top 0.3s;
     transform-origin: 50% 50%;
+    color: yellow;
 }
