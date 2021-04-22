@@ -147,7 +147,7 @@ pipeline {
 
                             if( "${USER_INPUT}" == "yes"){
                                 sshagent(credentials : ['kube_master']) {
-                                    sh "scp kubernetes-deploy.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
+                                    sh "scp ./kubernetes/kubernetes-deploy-qa.yaml stainley@192.168.1.100:/home/stainley/Public/kubernetes"
                                     sh """ssh -t stainley@192.168.1.100 -o StrictHostKeyChecking=no << EOF
                                         cd Public/kubernetes
                                         microk8s kubectl apply -f kubernetes-deploy.yaml
